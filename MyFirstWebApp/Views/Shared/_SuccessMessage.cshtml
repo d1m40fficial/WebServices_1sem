@@ -1,0 +1,10 @@
+@*
+    Частичное представление с сообщением об успешном выполнении операции.
+*@
+@if (TempData["Success"] is string success)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @success
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+    </div>
+}

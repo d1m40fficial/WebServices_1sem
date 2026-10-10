@@ -1,0 +1,19 @@
+@model ContactGroup
+@{
+    ViewData["Title"] = "Удаление группы";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h3 class="text-danger">Удалить группу «@Model.Name»?</h3>
+<p class="text-muted">
+    В группе находится контактов: <strong>@Model.ContactsCount</strong>.
+    Сами контакты из справочника удалены не будут — у них станет пустая группа.
+</p>
+
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-danger">Да, удалить</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+    </div>
+</form>
