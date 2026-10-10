@@ -203,8 +203,8 @@ var where = conditions.Count > 0 ? " WHERE " + string.Join(" AND ", conditions) 
 Требуется [.NET SDK 10.0](https://dotnet.microsoft.com/download).
 
 ```bash
-git clone https://github.com/d1m40official/MyFirstWebApp.git
-cd MyFirstWebApp
+git clone https://github.com/d1m40fficial/2026-ITPSIS-pr1.git
+cd 2026-ITPSIS-pr1
 dotnet restore
 dotnet run
 ```
