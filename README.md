@@ -234,12 +234,19 @@ dotnet add package Microsoft.Data.Sqlite
 
 Каждый этап работы выделен в отдельный commit:
 
-| Commit | Сообщение                                                          | Содержание |
-|--------|--------------------------------------------------------------------|------------|
-| `2d373ac` | `Initial commit: ASP.NET MVC project template from Visual Studio`   | Шаблон проекта из Visual Studio, `.gitignore` |
+```bash
+git log --oneline
+```
+
+| Commit    | Сообщение | Содержание |
+|-----------|-----------|------------|
+| `2d373ac` | `Initial commit: ASP.NET MVC project template from Visual Studio` | Шаблон проекта из Visual Studio, `.gitignore` |
 | `66b8719` | `Add SQLite database setup: Dapper/Microsoft.Data.Sqlite packages, AppDatabase with schema creation and seed data` | Подключение SQLite и Dapper, класс `AppDatabase` со схемой и начальными данными, модели `Contact` и `ContactGroup` |
 | `9d81c69` | `Add ContactsController and GroupsController with full CRUD against SQLite` | Контроллеры со всеми CRUD-операциями и фильтрацией |
 | `20ff5e6` | `Add Razor views: contact/group lists, filters, CRUD forms and navigation` | Представления (списки, формы, подтверждение удаления), навигация |
+| `2be92ac` | `Add README with practical work report: task, DB schema, CRUD, filters, run instructions` | Отчёт по практической работе |
+| `f2d4f52` | `Fix repository URL in README clone instructions` | Ссылка на репозиторий |
+| `985764e` | `Update repository URL in README to WebServices_1sem` | Ссылка на репозиторий |
 
 ## Проверка работоспособности
 
