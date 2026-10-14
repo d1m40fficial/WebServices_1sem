@@ -6,13 +6,15 @@ namespace Server.Dtos;
 public record ContactGroupDto(int Id, string Name, string? Description, int ContactsCount);
 
 /// <summary>Данные для создания или изменения группы.</summary>
-public record ContactGroupWriteDto(
-    [property: Required(ErrorMessage = "Название группы обязательно.")]
-    [property: StringLength(50, ErrorMessage = "Название не должно превышать 50 символов.")]
-    string Name,
+public class ContactGroupWriteDto
+{
+    [Required(ErrorMessage = "Название группы обязательно.")]
+    [StringLength(50, ErrorMessage = "Название не должно превышать 50 символов.")]
+    public string Name { get; set; } = string.Empty;
 
-    [property: StringLength(200, ErrorMessage = "Описание не должно превышать 200 символов.")]
-    string? Description);
+    [StringLength(200, ErrorMessage = "Описание не должно превышать 200 символов.")]
+    public string? Description { get; set; }
+}
 
 /// <summary>Контакт в ответе API: включает название группы, полученное по связи.</summary>
 public record ContactDto(
@@ -25,19 +27,21 @@ public record ContactDto(
     string? GroupName);
 
 /// <summary>Данные для создания или изменения контакта.</summary>
-public record ContactWriteDto(
-    [property: Required(ErrorMessage = "ФИО обязательно.")]
-    [property: StringLength(100, ErrorMessage = "ФИО не должно превышать 100 символов.")]
-    string FullName,
+public class ContactWriteDto
+{
+    [Required(ErrorMessage = "ФИО обязательно.")]
+    [StringLength(100, ErrorMessage = "ФИО не должно превышать 100 символов.")]
+    public string FullName { get; set; } = string.Empty;
 
-    [property: StringLength(25, ErrorMessage = "Телефон не должен превышать 25 символов.")]
-    string? Phone,
+    [StringLength(25, ErrorMessage = "Телефон не должен превышать 25 символов.")]
+    public string? Phone { get; set; }
 
-    [property: EmailAddress(ErrorMessage = "Некорректный адрес электронной почты.")]
-    [property: StringLength(100, ErrorMessage = "E-mail не должен превышать 100 символов.")]
-    string? Email,
+    [EmailAddress(ErrorMessage = "Некорректный адрес электронной почты.")]
+    [StringLength(100, ErrorMessage = "E-mail не должен превышать 100 символов.")]
+    public string? Email { get; set; }
 
-    [property: StringLength(100, ErrorMessage = "Должность не должна превышать 100 символов.")]
-    string? Position,
+    [StringLength(100, ErrorMessage = "Должность не должна превышать 100 символов.")]
+    public string? Position { get; set; }
 
-    int? GroupId);
+    public int? GroupId { get; set; }
+}
