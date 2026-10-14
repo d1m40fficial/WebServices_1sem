@@ -32,9 +32,19 @@ public class ContactsApiClient
         return await _http.GetFromJsonAsync<List<ContactGroupModel>>(url) ?? new List<ContactGroupModel>();
     }
 
-    /// <summary>Выборка одной группы.</summary>
-    public Task<ContactGroupModel?> GetGroupAsync(int id) =>
-        _http.GetFromJsonAsync<ContactGroupModel>($"api/groups/{id}");
+    /// <summary>Выборка одной группы. Возвращает null, если группа не найдена.</summary>
+    public async Task<ContactGroupModel?> GetGroupAsync(int id)
+    {
+        using var response = await _http.GetAsync($"api/groups/{id}");
+
+        if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            return null;
+        }
+
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadFromJsonAsync<ContactGroupModel>();
+    }
 
     /// <summary>Выборка контактов указанной группы.</summary>
     public async Task<List<ContactModel>> GetGroupContactsAsync(int id) =>
@@ -73,9 +83,19 @@ public class ContactsApiClient
         return await _http.GetFromJsonAsync<List<ContactModel>>(url) ?? new List<ContactModel>();
     }
 
-    /// <summary>Выборка одного контакта.</summary>
-    public Task<ContactModel?> GetContactAsync(int id) =>
-        _http.GetFromJsonAsync<ContactModel>($"api/contacts/{id}");
+    /// <summary>Выборка одного контакта. Возвращает null, если контакт не найден.</summary>
+    public async Task<ContactModel?> GetContactAsync(int id)
+    {
+        using var response = await _http.GetAsync($"api/contacts/{id}");
+
+        if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            return null;
+        }
+
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadFromJsonAsync<ContactModel>();
+    }
 
     public Task<ApiResult<ContactModel>> CreateContactAsync(ContactInput input) =>
         SendAsync<ContactModel>(HttpMethod.Post, "api/contacts", input);

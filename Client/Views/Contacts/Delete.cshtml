@@ -1,0 +1,16 @@
+@model ContactModel
+@{
+    ViewData["Title"] = "Удаление контакта";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h3 class="text-danger">Удалить контакт «@Model.FullName»?</h3>
+<p class="text-muted">Действие нельзя отменить. Будет вызван метод DELETE /api/contacts/@Model.Id.</p>
+
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-danger">Да, удалить</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Отмена</a>
+    </div>
+</form>

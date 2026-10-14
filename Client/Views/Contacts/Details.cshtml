@@ -1,0 +1,47 @@
+@model ContactModel
+@{
+    ViewData["Title"] = "Карточка контакта";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="card card-body" style="max-width: 640px;">
+    <dl class="row mb-0">
+        <dt class="col-sm-3">Id</dt>
+        <dd class="col-sm-9">@Model.Id</dd>
+
+        <dt class="col-sm-3">ФИО</dt>
+        <dd class="col-sm-9">@Model.FullName</dd>
+
+        <dt class="col-sm-3">Телефон</dt>
+        <dd class="col-sm-9">@Model.Phone</dd>
+
+        <dt class="col-sm-3">E-mail</dt>
+        <dd class="col-sm-9">
+            @if (!string.IsNullOrWhiteSpace(Model.Email))
+            {
+                <a href="mailto:@Model.Email">@Model.Email</a>
+            }
+        </dd>
+
+        <dt class="col-sm-3">Должность</dt>
+        <dd class="col-sm-9">@Model.Position</dd>
+
+        <dt class="col-sm-3">Группа</dt>
+        <dd class="col-sm-9">
+            @if (Model.GroupId is int id)
+            {
+                <a asp-controller="Groups" asp-action="Details" asp-route-id="@id">@Model.GroupName</a>
+            }
+            else
+            {
+                <span class="text-muted">Без группы</span>
+            }
+        </dd>
+    </dl>
+</div>
+
+<div class="d-flex gap-2 mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Изменить</a>
+    <a asp-action="Index" class="btn btn-outline-primary">К списку</a>
+</div>

@@ -1,0 +1,87 @@
+@model List<ContactModel>
+@{
+    ViewData["Title"] = "Контакты";
+    var groups = ViewData["Groups"] as List<ContactGroupModel> ?? new List<ContactGroupModel>();
+    var search = ViewData["Search"] as string;
+    var groupId = ViewData["GroupId"] as int?;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<partial name="_StatusMessage" />
+
+<p class="text-muted">Через API получено контактов: <strong>@Model.Count</strong></p>
+
+@* Фильтрация: параметры передаются в API как query-строка *@
+<form asp-action="Index" method="get" class="card card-body mb-3">
+    <div class="row g-2 align-items-end">
+        <div class="col-md-5">
+            <label class="form-label" for="search">Поиск по ФИО, телефону, e-mail, должности</label>
+            <input type="text" id="search" name="search" value="@search" class="form-control" placeholder="Например: Иванов" />
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" for="groupId">Группа</label>
+            <select id="groupId" name="groupId" asp-items="@(new SelectList(groups, "Id", "Name", groupId))" class="form-select">
+                <option value="">Все группы</option>
+            </select>
+        </div>
+        <div class="col-md-3 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Фильтр</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Сброс</a>
+            <a asp-action="Create" class="btn btn-success">Добавить</a>
+        </div>
+    </div>
+</form>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">По заданным условиям контакты не найдены.</div>
+}
+else
+{
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Id</th>
+                <th>ФИО</th>
+                <th>Телефон</th>
+                <th>E-mail</th>
+                <th>Должность</th>
+                <th>Группа</th>
+                <th style="width: 220px;">Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var contact in Model)
+            {
+                <tr>
+                    <td>@contact.Id</td>
+                    <td>@contact.FullName</td>
+                    <td>@contact.Phone</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(contact.Email))
+                        {
+                            <a href="mailto:@contact.Email">@contact.Email</a>
+                        }
+                    </td>
+                    <td>@contact.Position</td>
+                    <td>
+                        @if (contact.GroupId is int id && !string.IsNullOrWhiteSpace(contact.GroupName))
+                        {
+                            <a asp-controller="Groups" asp-action="Details" asp-route-id="@id">@contact.GroupName</a>
+                        }
+                        else
+                        {
+                            <span class="text-muted">—</span>
+                        }
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@contact.Id">Просмотр</a>
+                        <a class="btn btn-sm btn-outline-secondary" asp-action="Edit" asp-route-id="@contact.Id">Изменить</a>
+                        <a class="btn btn-sm btn-outline-danger" asp-action="Delete" asp-route-id="@contact.Id">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

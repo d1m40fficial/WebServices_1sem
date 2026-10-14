@@ -1,0 +1,61 @@
+@model ContactGroupModel
+@{
+    ViewData["Title"] = "Группа: " + Model.Name;
+    var contacts = ViewData["Contacts"] as List<ContactModel> ?? new List<ContactModel>();
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<partial name="_StatusMessage" />
+
+<div class="card card-body mb-3" style="max-width: 640px;">
+    <dl class="row mb-0">
+        <dt class="col-sm-3">Id</dt>
+        <dd class="col-sm-9">@Model.Id</dd>
+
+        <dt class="col-sm-3">Название</dt>
+        <dd class="col-sm-9">@Model.Name</dd>
+
+        <dt class="col-sm-3">Описание</dt>
+        <dd class="col-sm-9">@Model.Description</dd>
+    </dl>
+</div>
+
+<h2 class="h4">Контакты группы (@contacts.Count)</h2>
+
+@if (contacts.Count == 0)
+{
+    <div class="alert alert-info">В этой группе пока нет контактов.</div>
+}
+else
+{
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>ФИО</th>
+                <th>Телефон</th>
+                <th>E-mail</th>
+                <th>Должность</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var contact in contacts)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="Contacts" asp-action="Details" asp-route-id="@contact.Id">@contact.FullName</a>
+                    </td>
+                    <td>@contact.Phone</td>
+                    <td>@contact.Email</td>
+                    <td>@contact.Position</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<div class="d-flex gap-2 mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Изменить</a>
+    <a asp-controller="Contacts" asp-action="Index" asp-route-groupId="@Model.Id" class="btn btn-outline-primary">Все контакты группы</a>
+    <a asp-action="Index" class="btn btn-outline-secondary">К списку групп</a>
+</div>
