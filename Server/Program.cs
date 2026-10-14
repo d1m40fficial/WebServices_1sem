@@ -1,13 +1,33 @@
+using System.Reflection;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
 using Server.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
 
-// Интерактивная документация OpenAPI/Swagger.
-builder.Services.AddOpenApi();
+// Интерактивная документация API: Swagger UI по адресу /swagger.
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Справочник контактов — Web API",
+        Version = "v1",
+        Description = "REST API для работы со справочником контактов и групп (Практическая работа №2)."
+    });
+
+    // Подключаем XML-комментарии из исходного кода, чтобы описания были видны в Swagger.
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+    if (File.Exists(xmlPath))
+    {
+        options.IncludeXmlComments(xmlPath);
+    }
+});
 
 // Регистрируем контекст EF Core поверх SQLite.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
@@ -26,10 +46,12 @@ using (var scope = app.Services.CreateScope())
     db.Database.EnsureCreated();
 }
 
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.MapOpenApi();
-}
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Справочник контактов API v1");
+    options.RoutePrefix = "swagger";
+});
 
 app.UseAuthorization();
 
